@@ -37,4 +37,14 @@ pub fn render(f: &mut Frame, stats: &SysStats) {
             .percent(stats.cpu_usage as u16),
         main_chunks[0],
     );
+
+    // RAM USAGE
+    let mem_p = (stats.mem_used as f64 / stats.mem_total as f64 * 100.0) as u16;
+    f.render_widget(
+        Gauge::default()
+            .block(Block::default().title(" RAM ").borders(Borders::ALL))
+            .gauge_style(Style::default().fg(Color::Magenta))
+            .percent(mem_p),
+        main_chunks[1],
+    );
 }
