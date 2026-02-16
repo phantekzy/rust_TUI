@@ -1,17 +1,17 @@
+mod system;
+mod ui;
+
+use crossterm::{
+    event::{self, Event, KeyCode},
+    execute,
+    terminal::{EnterAlternateScreen, LeaveAlternateScreen, disable_raw_mode, enable_raw_mode},
+};
+use ratatui::{Terminal, backend::CrosstermBackend};
 use std::{
-    alloc::System,
     io,
     time::{Duration, Instant},
 };
-
-use crossterm::{
-    event::{self, Event, KeyCode}, execute, terminal::{self, EnterAlternateScreen, enable_raw_mode}
-};
-use ratatui::{Terminal, backend, prelude::CrosstermBackend};
-use sysinfo::System;
-
-mod system;
-mod ui;
+use sysinfo::{System, SystemExt};
 
 fn main() -> Result<(), io::Error> {
     // Setup terminal
@@ -41,4 +41,13 @@ fn main() -> Result<(), io::Error> {
             }
         }
 
+        if last_tick.elapsed() >= tick_rate {
+            last_tick = Instant::now();
+        }
+    }
+
+    // Restore terminal
+    disable_raw_mode()?;
+    execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
+    Ok(())
 }
