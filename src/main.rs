@@ -1,6 +1,7 @@
 mod system;
 mod ui;
 
+use crate::system::SystemTracker;
 use crossterm::{
     event::{self, Event, KeyCode},
     execute,
@@ -11,22 +12,22 @@ use std::{
     io,
     time::{Duration, Instant},
 };
-use sysinfo::System;
 
 fn main() -> Result<(), io::Error> {
-    // Setup terminal
     enable_raw_mode()?;
     let mut stdout = io::stdout();
     execute!(stdout, EnterAlternateScreen)?;
     let backend = CrosstermBackend::new(stdout);
     let mut terminal = Terminal::new(backend)?;
 
-    let mut sys = System::new_all();
+    let mut tracker = SystemTracker::new();
+
     let tick_rate = Duration::from_millis(500);
     let mut last_tick = Instant::now();
 
     loop {
-        let stats = system::get_stats(&mut sys);
+        let stats = tracker.get_stats();
+
         terminal.draw(|f| ui::render(f, &stats))?;
 
         let timeout = tick_rate
@@ -46,7 +47,6 @@ fn main() -> Result<(), io::Error> {
         }
     }
 
-    // Restore terminal
     disable_raw_mode()?;
     execute!(terminal.backend_mut(), LeaveAlternateScreen)?;
     Ok(())
