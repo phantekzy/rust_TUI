@@ -10,18 +10,18 @@ pub fn render(f: &mut Frame, stats: &SysStats) {
         .direction(Direction::Vertical)
         .margin(2)
         .constraints([
-            // CPU
+            // CPU GAUGE
             Constraint::Length(3),
-            // RAM
+            // RAM GAUGE
             Constraint::Length(3),
             // INFO
             Constraint::Min(0),
         ])
         .split(f.size());
 
-    // CPU BAR
-    let cpu_gauge = Gauge::Default()
-        .block(Block::default().title(" CPU USAGE ").borders(Borders::ALL))
+    // 1. CPU Bar
+    let cpu_gauge = Gauge::default()
+        .block(Block::default().title(" CPU Usage ").borders(Borders::ALL))
         .gauge_style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan))
         .percent(stats.cpu_usage as u16);
     f.render_widget(cpu_gauge, chunks[0]);
@@ -34,6 +34,7 @@ pub fn render(f: &mut Frame, stats: &SysStats) {
         .percent(mem_percent);
     f.render_widget(mem_gauge, chunks[1]);
 
+    // 3. Simple Text
     let help_text =
         Paragraph::new("Press 'q' to quit").block(Block::default().borders(Borders::ALL));
     f.render_widget(help_text, chunks[2]);
