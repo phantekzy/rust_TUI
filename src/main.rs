@@ -5,8 +5,7 @@ use std::{
 };
 
 use crossterm::{
-    execute,
-    terminal::{self, EnterAlternateScreen, enable_raw_mode},
+    event::{self, Event, KeyCode}, execute, terminal::{self, EnterAlternateScreen, enable_raw_mode}
 };
 use ratatui::{Terminal, backend, prelude::CrosstermBackend};
 use sysinfo::System;
@@ -41,4 +40,5 @@ fn main() -> Result<(), io::Error> {
                 }
             }
         }
+
 }
