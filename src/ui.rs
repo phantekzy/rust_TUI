@@ -12,4 +12,14 @@ pub fn render(f: &mut Frame, stats: &SysStats) {
             Constraint::Min(10),
         ])
         .split(f.area());
+
+    let bottom_chunks = Layout::default()
+        .direction(Direction::Horizontal)
+        .constraints([
+            // Processes
+            Constraint::Percentage(50),
+            // Network
+            Constraint::Percentage(50),
+        ])
+        .split(main_chunks[2]);
 }
