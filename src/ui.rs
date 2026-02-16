@@ -18,4 +18,11 @@ pub fn render(f: &mut Frame, stats: &SysStats) {
             Constraint::Min(0),
         ])
         .split(f.size());
+
+    // CPU BAR
+    let cpu_gauge = Gauge::Default()
+        .block(Block::default().title(" CPU USAGE ").borders(Borders::ALL))
+        .gauge_style(ratatui::style::Style::default().fg(ratatui::style::Color::Cyan))
+        .percent(stats.cpu_usage as u16);
+    f.render_widget(cpu_gauge, chunks[0]);
 }
