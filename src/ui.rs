@@ -1,5 +1,11 @@
 use crate::system::SysStats;
-use ratatui::layout::{Constraint, Direction, Layout};
+use ratatui::{
+    Frame,
+    layout::{Constraint, Direction, Layout},
+    style::{Color, Style},
+    widgets::{Block, Borders, Gauge},
+};
+
 pub fn render(f: &mut Frame, stats: &SysStats) {
     let main_chunks = Layout::default()
         .direction(Direction::Vertical)
@@ -22,4 +28,13 @@ pub fn render(f: &mut Frame, stats: &SysStats) {
             Constraint::Percentage(50),
         ])
         .split(main_chunks[2]);
+
+    // CPU USAGE
+    f.render_widget(
+        Gauge::default()
+            .block(Block::default().title(" CPU ").borders(Borders::ALL))
+            .gauge_style(Style::default().fg(Color::Cyan))
+            .percent(stats.cpu_usage as u16),
+        main_chunks[0],
+    );
 }
